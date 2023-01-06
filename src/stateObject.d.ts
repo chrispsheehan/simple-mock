@@ -2,7 +2,8 @@ export interface StateObject {
     users: [
         {
             firstName: string,
-            lastName: string
+            lastName: string,
+            id: string
         }
     ]
 }

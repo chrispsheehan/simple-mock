@@ -1,10 +1,10 @@
 import { saveState, getState } from "./state";
 import { logRequest } from "./logger";
 import { StateObject } from "stateObject";
+import { createGuid } from "./helper";
 
-const health = (request, response) => {
-    
-    logRequest('Handled', request);
+const health = (_, response) => {
+
     response.json({health: 'OK'});
 }
 
@@ -18,11 +18,16 @@ const getUsers = (request, response) => {
 
     let userid = request.query.userid;
 
-    if(userid) {
-        console.log('found email');
-    }
+    let state: StateObject = getState();
 
-    response.status(200).json({});
+    if(userid) {
+
+        let user = state.users.filter(user => user.id === userid)
+        response.status(200).json(user[0]);
+    }
+    else {
+        response.status(200).json(state.users);
+    }
 }
 
 const postUser = (request, response) => {
@@ -35,9 +40,10 @@ const postUser = (request, response) => {
         response.status(400).json({badrequest: "User already exists"});
     }
     else {
-        state.users.push(newUser);
+        let savedUser = {...newUser, ...{id: createGuid()}}
+        state.users.push(savedUser);
         saveState(state);
-        response.status(201).json(newUser);
+        response.status(201).json(savedUser);
     }
 }
 

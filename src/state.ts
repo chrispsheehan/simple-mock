@@ -33,8 +33,5 @@ export const saveState = (data) => {
             console.log(err.message);
             return;
         }
-        else [
-            console.log('save')
-        ]
     });
 }
