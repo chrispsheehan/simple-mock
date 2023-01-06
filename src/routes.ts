@@ -1,5 +1,6 @@
-import { saveState } from "./state";
+import { saveState, getState } from "./state";
 import { logRequest } from "./logger";
+import { StateObject } from "stateObject";
 
 const health = (request, response) => {
     
@@ -17,8 +18,6 @@ const getUsers = (request, response) => {
 
     let userid = request.query.userid;
 
-    saveState({badgers: "sasasas"})
-
     if(userid) {
         console.log('found email');
     }
@@ -27,8 +26,11 @@ const getUsers = (request, response) => {
 }
 
 const postUser = (request, response) => {
-
-    response.status(201).json({});
+    
+    let state: StateObject = getState();
+    state.users.push(request.body);
+    saveState(state);
+    response.status(201).json(request.body);
 }
 
 export default {

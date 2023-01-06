@@ -16,7 +16,7 @@ function exists () {
     }
 }
 
-function getState () {
+export function getState () {
     return JSON.parse(fs.readFileSync(statefilePath).toString());
 }
 
@@ -28,18 +28,13 @@ export const saveState = (data) => {
         });
     }
 
-    let state = getState();
-
-    console.log('data' + JSON.stringify(data));
-    console.log('state' + JSON.stringify(state));
-    let combined = {...state, ...data}
-    console.log('com'+ JSON.stringify(combined));
-
-    fs.writeFile(statefilePath, JSON.stringify({...state, ...data}), function (err) {
+    fs.writeFile(statefilePath, JSON.stringify(data), function (err) {
         if (err) {
             console.log(err.message);
             return;
         }
+        else [
+            console.log('save')
+        ]
     });
 }
-
