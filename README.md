@@ -2,5 +2,7 @@
 
 ## Local development
 
-- Start live reload session (recommended): `yarn start`
-- Start static instance: `yarn static`
+*NOTE* evelated previlages (`sudo`) required to access state file.
+
+- Start live reload session (recommended): `sudo yarn start`
+- Start static instance: `sudo yarn static`

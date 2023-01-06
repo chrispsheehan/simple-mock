@@ -1,3 +1,4 @@
+import { saveState } from "./state";
 import { logRequest } from "./logger";
 
 const health = (request, response) => {
@@ -15,6 +16,8 @@ const invalid = (request, response) => {
 const getUsers = (request, response) => {
 
     let userid = request.query.userid;
+
+    saveState([])
 
     if(userid) {
         console.log('found email');

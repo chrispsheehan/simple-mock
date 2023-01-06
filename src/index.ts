@@ -66,4 +66,3 @@ if (fs.existsSync(keyfile)) {
 else {
   console.error('!!!COULD NOT FIND KEY/CRT FILES - THIS IS FINE FOR LOCAL DEV!!!')
 }
-
