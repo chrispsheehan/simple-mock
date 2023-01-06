@@ -27,10 +27,18 @@ const getUsers = (request, response) => {
 
 const postUser = (request, response) => {
     
+    let newUser = request.body;
+
     let state: StateObject = getState();
-    state.users.push(request.body);
-    saveState(state);
-    response.status(201).json(request.body);
+
+    if (state.users.filter(user => user.firstName === newUser.firstName && user.lastName === newUser.lastName).length > 0) {
+        response.status(400).json({badrequest: "User already exists"});
+    }
+    else {
+        state.users.push(newUser);
+        saveState(state);
+        response.status(201).json(newUser);
+    }
 }
 
 export default {
