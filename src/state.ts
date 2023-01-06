@@ -16,8 +16,11 @@ function exists () {
     }
 }
 
+function getState () {
+    return JSON.parse(fs.readFileSync(statefilePath).toString());
+}
 
-export const saveState = (data: object) => {
+export const saveState = (data) => {
 
     if (!exists()) {
         fs.writeFile(statefilePath, JSON.stringify(defaultObj), function (err) {
@@ -25,13 +28,18 @@ export const saveState = (data: object) => {
         });
     }
 
-    // fs.writeFile(statefile, JSON.stringify(data), function (err) {
-    //     if (err) {
-    //       console.log('There has been an error saving your configuration data.');
-    //       console.log(err.message);
-    //       return;
-    //     }
-    //     console.log('Configuration saved successfully.')
-    // });
+    let state = getState();
+
+    console.log('data' + JSON.stringify(data));
+    console.log('state' + JSON.stringify(state));
+    let combined = {...state, ...data}
+    console.log('com'+ JSON.stringify(combined));
+
+    fs.writeFile(statefilePath, JSON.stringify({...state, ...data}), function (err) {
+        if (err) {
+            console.log(err.message);
+            return;
+        }
+    });
 }
 

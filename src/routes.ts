@@ -17,7 +17,7 @@ const getUsers = (request, response) => {
 
     let userid = request.query.userid;
 
-    saveState([])
+    saveState({badgers: "sasasas"})
 
     if(userid) {
         console.log('found email');
