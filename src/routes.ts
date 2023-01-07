@@ -5,6 +5,16 @@ import { StateLoader } from "./stateLoader";
 let loader = new StateLoader();
 let state = loader.state;
 
+const usersExist = (): boolean => {
+    try {
+        if(state.users.length) {
+            return true;
+        }
+    } catch (error) {
+        return false;
+    }
+}
+
 const getUsers = (req: Request, res: Response) => {
 
     let userid = req.query.userid;
@@ -23,7 +33,13 @@ const postUser = (req: Request, res: Response) => {
     
     let newUser = req.body;
 
-    if (state.users.filter(user => user.firstName === newUser.firstName && user.lastName === newUser.lastName).length > 0) {
+    if(!usersExist()) { // create users if not there
+        state = {
+            users: []
+        }
+    }
+
+    if (state.users.filter((user: { firstName: string; lastName: string; }) => user.firstName === newUser.firstName && user.lastName === newUser.lastName).length > 0) {
         res.status(400).json({badrequest: "User already exists"});
     }
     else {
