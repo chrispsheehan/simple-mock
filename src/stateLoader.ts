@@ -19,7 +19,7 @@ export class StateLoader implements StateObject {
             });
         }
 
-        this.state = JSON.parse(fs.readFileSync(statefile).toString());
+        this.load();
     }
 
     private exists (): boolean {  
@@ -31,6 +31,10 @@ export class StateLoader implements StateObject {
             console.warn(`Could not find state file at ${statefile} - have you set permissons?`)
             return false
         }
+    }
+
+    public load() {
+        this.state = JSON.parse(fs.readFileSync(statefile).toString());
     }
 
     public save = () => {
