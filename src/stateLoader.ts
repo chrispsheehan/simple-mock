@@ -52,6 +52,7 @@ export class StateLoader implements StateObject {
 
     public reset = () => {
 
+        this.load();
         this.state = defaultObj;
         this.save();
     }

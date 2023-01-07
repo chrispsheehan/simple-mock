@@ -12,6 +12,7 @@ const reset = (req: Request, res: Response) => {
 
 const get = (req: Request, res: Response) => {
 
+    loader.load();
     res.status(200).json(loader.state);
 }
 
