@@ -1,4 +1,3 @@
-import { logRequest } from "./logger";
 import { Request, Response } from 'express';
 
 const health = (_, response) => {
@@ -8,7 +7,7 @@ const health = (_, response) => {
 
 const invalid = (req: Request, res: Response) => {
 
-    logRequest('INVALID ROUTE URL', req);
+    console.error(`\n*** ${req.url} ROUTE NOT SUPPORTED***\n`);
     res.status(404).json({message: "invalidRoute"})
 }
 
