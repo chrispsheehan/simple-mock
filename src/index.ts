@@ -1,5 +1,5 @@
 import fs from 'fs';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import https from 'https';
 import http from 'http';
 import * as dotenv from 'dotenv'
@@ -19,28 +19,28 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.send(`Hello from ${MOCK_REFERENCE} Mock!`);  
 });
 
-app.get('/health', (req, res) => { 
+app.get('/health', (req: Request, res: Response) => { 
   routes.health(req, res);
 });
 
 ///////////// VALID ROUTES ///////////////
 
-app.post('/users', (req, res) => { 
+app.post('/users', (req: Request, res: Response) => { 
   routes.postUser(req, res);
 });
 
-app.get('/users', (req, res) => { 
+app.get('/users', (req: Request, res: Response) => { 
   routes.getUsers(req, res);
 });
 
 /////// END OF VALID ROUTES //////
 
 // log out invalid requests
-app.get('/*', function(req, res) {
+app.get('/*', function(req: Request, res: Response) {
   routes.invalid(req, res);
 });
 
