@@ -2,13 +2,17 @@ import fs from 'fs';
 import express from 'express';
 import https from 'https';
 import http from 'http';
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 import routes from './routes';
 
-const LOCAL_PORT = 2000;
-const HTTP_PORT = 8080;
-const HTTPS_PORT = 8443;
-const MOCK_REFERENCE = 'Mocky'
+const HTTP_PORT = 8080; // standard port
+const HTTPS_PORT = 8443; // standard port
+
+const LOCAL_PORT = process.env.LOCAL_PORT || 2000;
+const MOCK_REFERENCE = process.env.MOCK_REFERENCE || 'ADD_DOTENV_FILE_TO_SET_MOCK_REFERENCE';
+const HTTPS_MODE = process.env.HTTPS_MODE === "true" || false; // workaround to resolve boolean
 
 const app = express();
 
@@ -16,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-  res.send(`Hello from ${MOCK_REFERENCE} Mock!`);
+  res.send(`Hello from ${MOCK_REFERENCE} Mock!`);  
 });
 
 app.get('/health', (req, res) => { 
@@ -40,29 +44,33 @@ app.get('/*', function(req, res) {
   routes.invalid(req, res);
 });
 
-app.listen(LOCAL_PORT, () =>
-  console.log(`${MOCK_REFERENCE} mock up and running!`),
-);
-
-// Handle http requests
+/// Serves basic localhost site
 var httpServer = http.createServer(app);
 httpServer.listen(HTTP_PORT);
 
-const certsFolder = '/dist/certs'
-const keyfile = `${certsFolder}/tls.key`; // mount the certs to allow https
-const certfile = `${certsFolder}/tls.crt`;
+app.listen(LOCAL_PORT, () => {
+  console.log(`${MOCK_REFERENCE} mock up and running!`);
+});
 
-if (fs.existsSync(keyfile)) {
+
+/////// START OF HTTPS CONFIG //////
+if(HTTPS_MODE) { // stop some noise locally
+  const certsFolder = '/dist/certs'; // mount cert files to this folder
+  const keyfile = `${certsFolder}/tls.key`; // most likely saved as a secret somewhere
+  const certfile = `${certsFolder}/tls.crt`; // same for this
   
-  var privateKey  = fs.readFileSync(keyfile, 'utf8');
-  var certificate = fs.readFileSync(certfile, 'utf8');
+  if (fs.existsSync(keyfile)) {
+    
+    var privateKey  = fs.readFileSync(keyfile, 'utf8');
+    var certificate = fs.readFileSync(certfile, 'utf8');
+    
+    var credentials = {key: privateKey, cert: certificate};
   
-  var credentials = {key: privateKey, cert: certificate};
-
-  var httpsServer = https.createServer(credentials, app);
-
-  httpsServer.listen(HTTPS_PORT);
-}
-else {
-  console.error('!!!COULD NOT FIND KEY/CRT FILES - THIS IS FINE FOR LOCAL DEV!!!')
+    var httpsServer = https.createServer(credentials, app);
+  
+    httpsServer.listen(HTTPS_PORT);
+  }
+  else {
+    console.error('!!!COULD NOT FIND KEY/CRT FILES - THIS IS FINE FOR LOCAL DEV!!!')
+  }
 }
