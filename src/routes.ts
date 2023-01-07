@@ -11,6 +11,7 @@ const usersExist = (): boolean => {
             return true;
         }
     } catch (error) {
+        console.warn('user object not found')
         return false;
     }
 }

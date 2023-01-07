@@ -23,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req: Request, res: Response, next) => { // log out requests
   console.log(`Params: ${JSON.stringify(req.params)}`); 
   console.log(`Headers: ${JSON.stringify(req.headers)}`);
+  console.log(`URL: ${JSON.stringify(req.url)}`);
   next();
 })
 
