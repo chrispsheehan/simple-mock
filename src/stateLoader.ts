@@ -1,14 +1,15 @@
 import fs from 'fs';
 import * as path from 'path';
-import { StateObject } from 'stateObject';
+import { StateObject } from './stateObject';
 
 const statefile = '../state.json';
 
 const defaultObj = {};
 
-export class State {
+export class StateLoader implements StateObject {
 
     private statefilePath: string;
+    public state: any; // can in theory be anything
 
     constructor() {
 
@@ -19,9 +20,11 @@ export class State {
                 console.log(`State file created at ${this.statefilePath}`);
             });
         }
+
+        this.state = JSON.parse(fs.readFileSync(this.statefilePath).toString());
     }
 
-    exists (): boolean {  
+    private exists (): boolean {  
 
         try {
             fs.accessSync(this.statefilePath, fs.constants.F_OK);
@@ -32,18 +35,13 @@ export class State {
         }
     }
 
-    save = (data: StateObject) => {
+    public save = () => {
     
-        fs.writeFile(this.statefilePath, JSON.stringify(data), function (err) {
+        fs.writeFile(this.statefilePath, JSON.stringify(this.state), function (err) {
             if (err) {
                 console.log(err.message);
                 return;
             }
         });
-    }
-
-    get (): StateObject {
-        
-        return JSON.parse(fs.readFileSync(this.statefilePath).toString());
     }
 }

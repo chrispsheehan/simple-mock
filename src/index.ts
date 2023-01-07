@@ -5,7 +5,8 @@ import http from 'http';
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-import routes from './routes';
+import generic from './routes.generic';
+import routes from './routes.withstate';
 
 const HTTP_PORT = 8080; // standard port
 const HTTPS_PORT = 8443; // standard port
@@ -24,7 +25,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/health', (req: Request, res: Response) => { 
-  routes.health(req, res);
+  generic.health(req, res);
 });
 
 ///////////// VALID ROUTES ///////////////
@@ -41,7 +42,7 @@ app.get('/users', (req: Request, res: Response) => {
 
 // log out invalid requests
 app.get('/*', function(req: Request, res: Response) {
-  routes.invalid(req, res);
+  generic.invalid(req, res);
 });
 
 /// Serves basic localhost site
