@@ -7,7 +7,7 @@ const reset = (req: Request, res: Response) => {
 
     loader.reset();
 
-    res.status(200).json(loader.state);
+    res.status(204).json(loader.state);
 }
 
 const get = (req: Request, res: Response) => {
