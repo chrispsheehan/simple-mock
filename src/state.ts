@@ -1,5 +1,6 @@
 import fs from 'fs';
 import * as path from 'path';
+import { StateObject } from 'stateObject';
 
 const statefile = '../state.json';
 
@@ -11,7 +12,8 @@ function exists () {
     try {
         fs.accessSync(statefilePath, fs.constants.F_OK);
         return true;
-    } catch(err) {   
+    } catch(err) {
+        console.warn(`Could not find state file at ${statefilePath} - have you set permissons?`)
         return false
     }
 }
@@ -20,7 +22,7 @@ export function getState () {
     return JSON.parse(fs.readFileSync(statefilePath).toString());
 }
 
-export const saveState = (data) => {
+export const saveState = (data: StateObject) => {
 
     if (!exists()) {
         fs.writeFile(statefilePath, JSON.stringify(defaultObj), function (err) {
