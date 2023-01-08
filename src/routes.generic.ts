@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
-const health = (_, response) => {
+const health = (req: Request, res: Response) => {
 
-    response.json({health: 'OK'});
+    res.json({health: 'OK'});
 }
 
 const invalid = (req: Request, res: Response) => {

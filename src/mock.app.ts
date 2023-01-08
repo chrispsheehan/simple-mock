@@ -37,12 +37,12 @@ export function mock (): express.Application {
       generic.health(req, res);
     });
     
-    app.delete('/state', (res: Response) => { 
-      state.reset(res);
+    app.delete('/state', (req: Request, res: Response) => { 
+      state.reset(req, res);
     });
     
-    app.get('/state', (res: Response) => { 
-      state.get(res);
+    app.get('/state', (req: Request, res: Response) => { 
+      state.get(req, res);
     });
 
     /// Serves basic localhost site
