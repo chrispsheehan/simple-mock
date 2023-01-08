@@ -5,9 +5,6 @@ import http from 'http';
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-import state from './routes.state';
-import { StateLoader } from './stateLoader';
-
 const HTTP_PORT = 8080; // standard port
 const HTTPS_PORT = 8443; // standard port
 
@@ -16,10 +13,9 @@ const MOCK_REFERENCE = process.env.MOCK_REFERENCE || 'ADD_DOTENV_FILE_TO_SET_MOC
 const HTTPS_MODE = process.env.HTTPS_MODE === "true" || false; // workaround to resolve boolean
 
 
-export function mock (loader: StateLoader): express.Application {
+export function mock (): express.Application {
 
     const app = express();
-    loader.load();
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
@@ -27,7 +23,7 @@ export function mock (loader: StateLoader): express.Application {
       console.log(`Params: ${JSON.stringify(req.params)}`); 
       console.log(`Headers: ${JSON.stringify(req.headers)}`);
       console.log(`${req.method}: ${JSON.stringify(req.url)}`);
-      next(loader.save());
+      next(console.log("afteer"));
     })
     
     app.get('/', (res: Response) => {
@@ -35,11 +31,11 @@ export function mock (loader: StateLoader): express.Application {
     });
     
     app.delete('/state', (req: Request, res: Response) => { 
-      state.reset(req, res);
+      res.status(204).json([]);
     });
     
     app.get('/state', (req: Request, res: Response) => { 
-      state.get(req, res);
+      res.status(200).json([]);
     });
 
     /// Serves basic localhost site

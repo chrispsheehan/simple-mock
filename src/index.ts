@@ -2,10 +2,8 @@ import { mock } from "./mock.app";
 import { Request, Response } from 'express';
 
 import routes from './routes';
-import { StateLoader } from "./stateLoader";
 
-let loader = new StateLoader();
-const app = mock(loader);
+const app = mock();
 
 app.get('/health', (req: Request, res: Response) => { 
   res.json({health: 'OK'});

@@ -1,12 +1,12 @@
 import { createGuid } from "./helper";
 import { Request, Response } from 'express';
-import { StateLoader } from "./stateLoader";
+import { State } from "./state";
 
-let loader = new StateLoader();
+let state = (new State).get();
 
-const usersExist = (): boolean => {
+const usersExist = (state: any): boolean => {
     try {
-        if(loader.state.users.length) {
+        if(state.users.length) {
             return true;
         }
     } catch (error) {
@@ -19,7 +19,7 @@ const getUsers = (req: Request, res: Response) => {
 
     let userid = req.query.userid;
 
-    if(!usersExist()) {
+    if(!usersExist(state)) {
         res.status(200).json({
             users: []
         });
@@ -27,11 +27,11 @@ const getUsers = (req: Request, res: Response) => {
     else {
         if(userid) {
 
-            let user = loader.state.users.filter(user => user.id === userid)
+            let user = state.users.filter(user => user.id === userid)
             res.status(200).json(user[0]);
         }
         else {
-            res.status(200).json(loader.state.users);
+            res.status(200).json(state.users);
         }
     }
 }
@@ -40,18 +40,18 @@ const postUser = (req: Request, res: Response) => {
     
     let newUser = req.body;
 
-    if(!usersExist()) { // create users if not there
-        loader.state = {
+    if(!usersExist(state)) { // create users if not there
+        state = {
             users: []
         }
     }
 
-    if (loader.state.users.filter((user: { firstName: string; lastName: string; }) => user.firstName === newUser.firstName && user.lastName === newUser.lastName).length > 0) {
+    if (state.users.filter((user: { firstName: string; lastName: string; }) => user.firstName === newUser.firstName && user.lastName === newUser.lastName).length > 0) {
         res.status(400).json({badrequest: "User already exists"});
     }
     else {
         let savedUser = {...newUser, ...{id: createGuid()}}
-        loader.state.users.push(savedUser);
+        state.users.push(savedUser);
         res.status(201).json(savedUser);
     }
 }
