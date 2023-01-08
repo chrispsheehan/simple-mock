@@ -5,7 +5,7 @@ import { StateObject } from './stateObject';
 
 const statefile = process.env.STATE_FILE || '../state.json';
 
-const defaultObj = {state: {}};
+const defaultObj = { state: {} };
 
 export class StateLoader implements StateObject {
 
@@ -33,8 +33,25 @@ export class StateLoader implements StateObject {
         }
     }
 
-    public load() {
-        this.state = JSON.parse(fs.readFileSync(statefile).toString());
+    getState(stateString: string): any {
+
+        try {
+
+            return JSON.parse(stateString);
+            
+        } catch (error) {
+            
+            console.error("COULD NOT PARSE STATE - SETTING TO DEFAULT VALUE");
+
+            return defaultObj;
+        }
+    }
+
+    public load()  {
+
+        let stateFileObject = fs.readFileSync(statefile).toString();
+
+        this.state = this.getState(stateFileObject);
     }
 
     public save = () => {
