@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import https from 'https';
 import http from 'http';
 import * as dotenv from 'dotenv'
+import { State } from './state';
 dotenv.config()
 
 const HTTP_PORT = 8080; // standard port
@@ -12,6 +13,13 @@ const LOCAL_PORT = process.env.LOCAL_PORT || 2000;
 const MOCK_REFERENCE = process.env.MOCK_REFERENCE || 'ADD_DOTENV_FILE_TO_SET_MOCK_REFERENCE';
 const HTTPS_MODE = process.env.HTTPS_MODE === "true" || false; // workaround to resolve boolean
 
+declare global {
+  namespace Express {
+    interface Request {
+      state: State
+    }
+  }
+}
 
 export function mock (): express.Application {
 
@@ -19,6 +27,10 @@ export function mock (): express.Application {
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+    app.use((req, res, next) => {
+      req.state = new State();
+      next();
+    });
     app.use((req: Request, res: Response, next) => { // log out requests
       console.log(`Params: ${JSON.stringify(req.params)}`); 
       console.log(`Headers: ${JSON.stringify(req.headers)}`);
