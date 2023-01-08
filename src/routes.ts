@@ -17,8 +17,6 @@ const usersExist = (): boolean => {
 
 const getUsers = (req: Request, res: Response) => {
 
-    loader.load();
-
     let userid = req.query.userid;
 
     if(!usersExist()) {
@@ -40,8 +38,6 @@ const getUsers = (req: Request, res: Response) => {
 
 const postUser = (req: Request, res: Response) => {
     
-    loader.load();
-
     let newUser = req.body;
 
     if(!usersExist()) { // create users if not there
@@ -56,7 +52,6 @@ const postUser = (req: Request, res: Response) => {
     else {
         let savedUser = {...newUser, ...{id: createGuid()}}
         loader.state.users.push(savedUser);
-        loader.save();
         res.status(201).json(savedUser);
     }
 }

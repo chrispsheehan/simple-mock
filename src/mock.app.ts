@@ -5,8 +5,8 @@ import http from 'http';
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-import generic from './routes.generic';
 import state from './routes.state';
+import { StateLoader } from './stateLoader';
 
 const HTTP_PORT = 8080; // standard port
 const HTTPS_PORT = 8443; // standard port
@@ -19,14 +19,16 @@ const HTTPS_MODE = process.env.HTTPS_MODE === "true" || false; // workaround to 
 export function mock (): express.Application {
 
     const app = express();
+    let loader = new StateLoader();
+    loader.load();
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use((req: Request, res: Response, next) => { // log out requests
       console.log(`Params: ${JSON.stringify(req.params)}`); 
       console.log(`Headers: ${JSON.stringify(req.headers)}`);
-      console.log(`URL: ${JSON.stringify(req.url)}`);
-      next();
+      console.log(`${req.method}: ${JSON.stringify(req.url)}`);
+      next(loader.save());
     })
     
     app.get('/', (res: Response) => {
@@ -34,7 +36,13 @@ export function mock (): express.Application {
     });
     
     app.get('/health', (req: Request, res: Response) => { 
-      generic.health(req, res);
+      res.json({health: 'OK'});
+    });
+
+    // log out invalid requests
+    app.all('/*', function(req: Request, res: Response) {
+      console.error(`***ROUTE NOT SUPPORTED***\n`);
+      res.status(404).json({message: "invalidRoute"})
     });
     
     app.delete('/state', (req: Request, res: Response) => { 
