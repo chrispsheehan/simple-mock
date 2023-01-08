@@ -49,6 +49,8 @@ export class StateLoader implements StateObject {
 
     public load()  {
 
+        console.info(`Loading state from ${statefile}`)
+
         let stateFileObject = fs.readFileSync(statefile).toString();
 
         this.state = this.getState(stateFileObject);
