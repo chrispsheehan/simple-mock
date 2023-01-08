@@ -16,10 +16,9 @@ const MOCK_REFERENCE = process.env.MOCK_REFERENCE || 'ADD_DOTENV_FILE_TO_SET_MOC
 const HTTPS_MODE = process.env.HTTPS_MODE === "true" || false; // workaround to resolve boolean
 
 
-export function mock (): express.Application {
+export function mock (loader: StateLoader): express.Application {
 
     const app = express();
-    let loader = new StateLoader();
     loader.load();
 
     app.use(express.json());
@@ -33,16 +32,6 @@ export function mock (): express.Application {
     
     app.get('/', (res: Response) => {
       res.send(`Hello from ${MOCK_REFERENCE} Mock!`);  
-    });
-    
-    app.get('/health', (req: Request, res: Response) => { 
-      res.json({health: 'OK'});
-    });
-
-    // log out invalid requests
-    app.all('/*', function(req: Request, res: Response) {
-      console.error(`***ROUTE NOT SUPPORTED***\n`);
-      res.status(404).json({message: "invalidRoute"})
     });
     
     app.delete('/state', (req: Request, res: Response) => { 
