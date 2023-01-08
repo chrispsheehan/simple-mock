@@ -1,55 +1,67 @@
-import { saveState, getState } from "./state";
-import { logRequest } from "./logger";
-import { StateObject } from "stateObject";
 import { createGuid } from "./helper";
+import { Request, Response } from 'express';
+import { StateLoader } from "./stateLoader";
 
-const health = (_, response) => {
+let loader = new StateLoader();
 
-    response.json({health: 'OK'});
+const usersExist = (): boolean => {
+    try {
+        if(loader.state.users.length) {
+            return true;
+        }
+    } catch (error) {
+        console.warn('user object not found')
+        return false;
+    }
 }
 
-const invalid = (request, response) => {
+const getUsers = (req: Request, res: Response) => {
 
-    logRequest('INVALID ROUTE URL', request);
-    response.status(404).json({message: "invalidRoute"})
-}
+    loader.load();
 
-const getUsers = (request, response) => {
+    let userid = req.query.userid;
 
-    let userid = request.query.userid;
-
-    let state: StateObject = getState();
-
-    if(userid) {
-
-        let user = state.users.filter(user => user.id === userid)
-        response.status(200).json(user[0]);
+    if(!usersExist()) {
+        res.status(200).json({
+            users: []
+        });
     }
     else {
-        response.status(200).json(state.users);
+        if(userid) {
+
+            let user = loader.state.users.filter(user => user.id === userid)
+            res.status(200).json(user[0]);
+        }
+        else {
+            res.status(200).json(loader.state.users);
+        }
     }
 }
 
-const postUser = (request, response) => {
+const postUser = (req: Request, res: Response) => {
     
-    let newUser = request.body;
+    loader.load();
 
-    let state: StateObject = getState();
+    let newUser = req.body;
 
-    if (state.users.filter(user => user.firstName === newUser.firstName && user.lastName === newUser.lastName).length > 0) {
-        response.status(400).json({badrequest: "User already exists"});
+    if(!usersExist()) { // create users if not there
+        loader.state = {
+            users: []
+        }
+    }
+
+    if (loader.state.users.filter((user: { firstName: string; lastName: string; }) => user.firstName === newUser.firstName && user.lastName === newUser.lastName).length > 0) {
+        res.status(400).json({badrequest: "User already exists"});
     }
     else {
         let savedUser = {...newUser, ...{id: createGuid()}}
-        state.users.push(savedUser);
-        saveState(state);
-        response.status(201).json(savedUser);
+        loader.state.users.push(savedUser);
+        loader.save();
+        res.status(201).json(savedUser);
     }
 }
 
 export default {
-    health,
-    invalid,
     getUsers,
     postUser
 };
