@@ -50,11 +50,12 @@ export function mock (): express.Application {
     httpServer.listen(HTTP_PORT);
 
     app.listen(LOCAL_PORT, () => {
-    console.log(`${MOCK_REFERENCE} mock up and running!`);
+      console.log(`${MOCK_REFERENCE} mock up and running!`);
     });
 
     /////// START OF HTTPS CONFIG //////
     if(HTTPS_MODE) { // stop some noise locally
+
         const certsFolder = '/dist/certs'; // mount cert files to this folder
         const keyfile = `${certsFolder}/tls.key`; // most likely saved as a secret somewhere
         const certfile = `${certsFolder}/tls.crt`; // same for this
@@ -62,15 +63,13 @@ export function mock (): express.Application {
         if (fs.existsSync(keyfile)) {
             
             var privateKey  = fs.readFileSync(keyfile, 'utf8');
-            var certificate = fs.readFileSync(certfile, 'utf8');
-            
-            var credentials = {key: privateKey, cert: certificate};
-        
+            var certificate = fs.readFileSync(certfile, 'utf8');        
+            var credentials = { key: privateKey, cert: certificate };
             var httpsServer = https.createServer(credentials, app);
-        
             httpsServer.listen(HTTPS_PORT);
         }
         else {
+
             console.error('!!!COULD NOT FIND KEY/CRT FILES - THIS IS FINE FOR LOCAL DEV!!!')
         }
     }
