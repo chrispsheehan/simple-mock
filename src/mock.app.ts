@@ -37,8 +37,8 @@ export function mock (): express.Application {
       next();
     })
     
-    app.get('/', (res: Response) => {
-      res.send(`Hello from ${MOCK_REFERENCE} Mock!`);  
+    app.get('/', (req: Request, res: Response) => {
+      res.send()  .send(`Hello from ${MOCK_REFERENCE} Mock!`);  
     });
     
     app.delete('/state', (req: Request, res: Response) => { 
