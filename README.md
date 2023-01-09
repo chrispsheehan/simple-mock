@@ -11,6 +11,7 @@
 - Start live reload session (recommended): `sudo yarn start`
 - ...OR Start static instance: `sudo yarn static`
 - Confirm by navigation to `http://localhost:2000` in a browser.
+- ...OR import and run the `Mock.postman_collection.json` postman collection.
 
 ## State
 
