@@ -27,13 +27,14 @@ export function mock (): express.Application {
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use((req: Request, res: Response) => { 
+    app.use((req: Request, res: Response, next) => { 
       console.log(`Params: ${JSON.stringify(req.params)}`); // log out requests
       console.log(`Headers: ${JSON.stringify(req.headers)}`);
       console.log(`${req.method}: ${JSON.stringify(req.url)}`);
       onFinished(res, function () {
         global.state.save(); // save state after each request
       })
+      next();
     })
     
     app.get('/', (res: Response) => {
@@ -41,7 +42,8 @@ export function mock (): express.Application {
     });
     
     app.delete('/state', (req: Request, res: Response) => { 
-      res.status(204).json(global.state.reset());
+      global.state.reset();
+      res.status(204).json({});
     });
     
     app.get('/state', (req: Request, res: Response) => { 
