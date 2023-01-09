@@ -8,7 +8,7 @@ const defaultObj = { state: {} };
 
 export class State {
 
-    public state: any; // can in theory be anything
+    public data: any; // can in theory be anything
 
     constructor() {
 
@@ -56,9 +56,16 @@ export class State {
         return this.getState(stateFileObject);
     }
 
+    public init(): void {
+
+        this.data = this.get();
+    }
+
     public save = () => {
-    
-        fs.writeFile(statefile, JSON.stringify(this.state), function (err) {
+        
+        console.debug(`Saving state: ${JSON.stringify(this.data)}`);
+
+        fs.writeFile(statefile, JSON.stringify(this.data), function (err) {
             
             if (err) {
                 
@@ -72,9 +79,10 @@ export class State {
         });
     }
 
-    public reset = () => {
+    public reset = (): any => {
 
-        this.state = defaultObj;
+        this.data = defaultObj;
         this.save();
+        return this.data;
     }
 }

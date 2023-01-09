@@ -14,41 +14,38 @@ const MOCK_REFERENCE = process.env.MOCK_REFERENCE || 'ADD_DOTENV_FILE_TO_SET_MOC
 const HTTPS_MODE = process.env.HTTPS_MODE === "true" || false; // workaround to resolve boolean
 
 declare global {
-  namespace Express {
-    interface Request {
-      state: State
-    }
-  }
+  var state: State
 }
 
 export function mock (): express.Application {
 
     const app = express();
+    global.state = new State();
+    global.state.init();
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use((req, res, next) => {
-      req.state = new State();
-      next();
-    });
     app.use((req: Request, res: Response, next) => { // log out requests
       console.log(`Params: ${JSON.stringify(req.params)}`); 
       console.log(`Headers: ${JSON.stringify(req.headers)}`);
       console.log(`${req.method}: ${JSON.stringify(req.url)}`);
-      next(console.log("afteer"));
+      next(global.state.save());
+      //next();
     })
     
     app.get('/', (res: Response) => {
       res.send(`Hello from ${MOCK_REFERENCE} Mock!`);  
     });
     
-    app.delete('/state', (req: Request, res: Response) => { 
-      res.status(204).json([]);
-    });
+    // app.delete('/state', (req: Request, res: Response) => { 
+
+    //   //console.log(global.state.get());
+    //   res.status(204).json({});
+    // });
     
-    app.get('/state', (req: Request, res: Response) => { 
-      res.status(200).json([]);
-    });
+    // app.get('/state', (req: Request, res: Response) => { 
+    //   res.status(200).json([]);
+    // });
 
     /// Serves basic localhost site
     var httpServer = http.createServer(app);
