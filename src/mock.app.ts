@@ -3,6 +3,8 @@ import express, { Request, Response } from 'express';
 import https from 'https';
 import http from 'http';
 import * as dotenv from 'dotenv'
+import onFinished from 'on-finished';
+
 import { State } from './state';
 dotenv.config()
 
@@ -25,12 +27,13 @@ export function mock (): express.Application {
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use((req: Request, res: Response, next) => { // log out requests
-      console.log(`Params: ${JSON.stringify(req.params)}`); 
+    app.use((req: Request, res: Response) => { 
+      console.log(`Params: ${JSON.stringify(req.params)}`); // log out requests
       console.log(`Headers: ${JSON.stringify(req.headers)}`);
       console.log(`${req.method}: ${JSON.stringify(req.url)}`);
-      next(global.state.save());
-      //next();
+      onFinished(res, function () {
+        global.state.save(); // save state after each request
+      })
     })
     
     app.get('/', (res: Response) => {
