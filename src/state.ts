@@ -4,7 +4,7 @@ dotenv.config();
 
 const statefile = process.env.STATE_FILE || '../state.json';
 
-const defaultObj = { state: {} };
+const defaultObj = {};
 
 export class State {
 

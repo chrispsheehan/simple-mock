@@ -38,7 +38,6 @@ export function mock (): express.Application {
     });
     
     app.delete('/state', (req: Request, res: Response) => { 
-
       res.status(204).json(global.state.reset());
     });
     

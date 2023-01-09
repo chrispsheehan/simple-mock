@@ -37,6 +37,12 @@ const getUsers = (req: Request, res: Response) => {
 
 const postUser = (req: Request, res: Response) => {
 
+    if(!usersExist(global.state.data)) { // create users if not there
+        global.state.data = {
+            users: []
+        }
+    }
+
     global.state.data.users.push({name: "ernie"})
     res.status(201).json(global.state.data)
 
