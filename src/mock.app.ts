@@ -37,15 +37,14 @@ export function mock (): express.Application {
       res.send(`Hello from ${MOCK_REFERENCE} Mock!`);  
     });
     
-    // app.delete('/state', (req: Request, res: Response) => { 
+    app.delete('/state', (req: Request, res: Response) => { 
 
-    //   //console.log(global.state.get());
-    //   res.status(204).json({});
-    // });
+      res.status(204).json(global.state.reset());
+    });
     
-    // app.get('/state', (req: Request, res: Response) => { 
-    //   res.status(200).json([]);
-    // });
+    app.get('/state', (req: Request, res: Response) => { 
+      res.status(200).json(global.state.data);
+    });
 
     /// Serves basic localhost site
     var httpServer = http.createServer(app);
