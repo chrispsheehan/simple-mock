@@ -8,10 +8,53 @@ services:
             args:
                 _HTTPS_MODE: "false"
                 _MOCK_REFERENCE: ${MOCK_REFERENCE}
-        image: ${MOCK_REFERENCE}:{MOCK_VERSION}
+        image: ${MOCK_REFERENCE}:${MOCK_VERSION}
         container_name: ${MOCK_REFERENCE}
         volumes:
             - ./state.json:/state.json
         ports: 
             - "8080:8080"
             - "2000:2000"
+        healthcheck:
+            test: "curl --fail http://localhost:8080/health || exit 1"
+            interval: 60s
+            retries: 5
+            start_period: 2s
+            timeout: 2s
+        networks:
+            - mock-nw
+        
+    ngrok_host:
+        image: wernight/ngrok
+        container_name: ngrok_host
+        depends_on:
+            mock:
+                condition: service_healthy
+        ports: 
+            - "4040:4040"
+        command: ngrok http mock:8080
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:4040"]
+            interval: 60s
+            retries: 5
+            start_period: 2s
+            timeout: 2s
+        networks:
+            - mock-nw
+            - ngrok_host-nw
+
+    ngrok_mock:
+        image: dwdraju/alpine-curl-jq
+        container_name: ngrok_mock
+        depends_on:
+            ngrok_host:
+                condition: service_healthy     
+        command: sh -c "curl -s http://ngrok_host:4040/api/tunnels | jq '.tunnels[0].public_url'"
+        networks:
+            - ngrok_host-nw
+
+networks:
+    mock-nw:
+        name: mock-nw
+    ngrok_host-nw:
+        name: ngrok_host-nw
