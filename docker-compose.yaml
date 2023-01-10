@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+
+    mock:
+        build:
+            context: .
+            args:
+                _HTTPS_MODE: "false"
+                _MOCK_REFERENCE: "MOCKY"
+        image: mock:1.0
+        container_name: mock
+        volumes:
+            - ./state.json:/state.json
+        ports: 
+            - "8080:8080"
+            - "2000:2000"
