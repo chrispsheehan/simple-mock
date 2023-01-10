@@ -5,7 +5,7 @@ import http from 'http';
 import * as dotenv from 'dotenv'
 import onFinished from 'on-finished';
 
-import { State } from './state';
+import { State } from './mock.state';
 dotenv.config()
 
 const HTTP_PORT = 8080; // standard port

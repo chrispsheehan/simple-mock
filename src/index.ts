@@ -1,7 +1,7 @@
-import { mock } from "./mock.app";
+import { mock } from "./mock/mock.app";
 import { Request, Response } from 'express';
 
-import routes from './routes';
+import routes from './users';
 
 const app = mock();
 
