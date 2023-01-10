@@ -7,9 +7,9 @@ services:
             context: .
             args:
                 _HTTPS_MODE: "false"
-                _MOCK_REFERENCE: "MOCKY"
-        image: mock:1.0
-        container_name: mock
+                _MOCK_REFERENCE: ${MOCK_REFERENCE}
+        image: ${MOCK_REFERENCE}:{MOCK_VERSION}
+        container_name: ${MOCK_REFERENCE}
         volumes:
             - ./state.json:/state.json
         ports: 
