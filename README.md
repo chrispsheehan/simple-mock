@@ -23,7 +23,7 @@
 - Build: `docker build . -t [NameOfMock]:[Version] --build-arg _HTTPS_MODE=[Boolean] --build-arg _MOCK_REFERENCE=[NameOfMock] --platform linux/amd64`
 - Run: `docker run -i --rm -p 8080:8080 -p 2000:2000 -v $PWD/state.json:/state.json [NameOfMock]:[Version]`
 
-#### Example
+#### Full example
 
 ```sh
 yarn build
@@ -33,8 +33,28 @@ docker run -i --rm -p 8080:8080 -p 2000:2000 -v $PWD/state.json:/state.json some
 
 ## Run via [Docker-Compose](https://docs.docker.com/compose/)
 
-- Run Locally: `MOCK_REFERENCE=mock-face MOCK_VERSION=1.0 docker-compose up --build --force-recreate mock`
+- Run Locally: `MOCK_REFERENCE=[NameOfMock] MOCK_VERSION=[Version] docker-compose up --build --force-recreate mock`
   - Access API via `curl http://localhost:8080/health`
-- ...OR Expose to the internet via [Ngrok](https://ngrok.com/): `MOCK_REFERENCE=mock-face MOCK_VERSION=1.0 docker-compose up --build --force-recreate ngrok_mock`
+  - Logs will be shown in console (unless [`--detach`](https://bobcares.com/blog/docker-compose-detached/) specified)
+  - ctl+c
+- ...OR Expose to the internet via [Ngrok](https://ngrok.com/): `MOCK_REFERENCE=[NameOfMock] MOCK_VERSION=[Version] docker-compose up --build --force-recreate ngrok_mock`
   - Access API via `curl $(docker logs ngrok_mock | xargs)/health`
-- Stop: `docker-compose down` or ctr+c
+  - Logs access via `docker logs -f [NameOfMock]`
+  - Stop: `docker-compose down`
+
+#### Full examples
+
+- Local
+
+```sh
+MOCK_REFERENCE=some-mock MOCK_VERSION=1.0 docker-compose up --build --force-recreate mock
+curl http://localhost:8080/health
+```
+
+- Ngrok (externally accessible)
+
+```sh
+MOCK_REFERENCE=some-mock MOCK_VERSION=1.0 docker-compose up --build --force-recreate ngrok_mock
+curl $(docker logs some-mock | xargs)/health
+docker logs -f some-mock
+```
