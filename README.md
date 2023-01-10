@@ -1,8 +1,15 @@
 # simple-mock
 
+A boiler plate repo for all of your mocking needs during test automation.
+
+- Based on [express](http://expressjs.com/) and written in [TypeScript](https://www.typescriptlang.org/).
+- Example 'user' enpoints are defined in [`index.ts`](./src/index.ts) and use functions imported from [`users.ts`](./src/users.ts).
+- State is held in a json file and can be obtained/deleted via `/mock/state`.
+
 ## Initial Setup
 
 - Create `.env` file by copying and renaming `.env.eample`.
+- Run `yarn build`.
 
 ## Local development
 
