@@ -41,12 +41,12 @@ export function mock (): express.Application {
       res.send(`Hello from ${MOCK_REFERENCE} Mock!`);  
     });
     
-    app.delete('/state', (req: Request, res: Response) => { 
+    app.delete('/mock/state', (req: Request, res: Response) => { 
       global.state.reset();
       res.status(204).json({});
     });
     
-    app.get('/state', (req: Request, res: Response) => { 
+    app.get('/mock/state', (req: Request, res: Response) => { 
       res.status(200).json(global.state.data);
     });
 
