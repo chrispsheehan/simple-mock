@@ -65,3 +65,12 @@ MOCK_REFERENCE=some-mock MOCK_VERSION=1.0 docker-compose up --build --force-recr
 curl $(docker logs some-mock | xargs)/health
 docker logs -f some-mock
 ```
+
+## HTTPS
+
+For those situations where your mock needs to be https;
+
+- Obtain your tls.crt and tls.key files (these are often mounted secrets in kubernetes).
+- Mount or copy them to `/dist/certs` within your container.
+  - [More details](https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster/)
+- Set `HTTPS_MODE` env var to "true".
