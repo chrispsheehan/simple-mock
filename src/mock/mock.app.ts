@@ -33,6 +33,11 @@ export function mock (): express.Application {
       console.log(`${req.method}: ${JSON.stringify(req.url)}`);
       onFinished(res, function () {
         global.state.save(); // save state after each request
+        // log out invalid requests
+        app.all('/*', function(req: Request, res: Response) {
+          console.error(`***ROUTE NOT SUPPORTED***\n`);
+          res.status(404).json({message: "invalidRoute"})
+        });
       })
       next();
     })
