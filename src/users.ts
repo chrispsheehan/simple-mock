@@ -15,9 +15,21 @@ const usersExist = (state: any): boolean => {
     }
 }
 
-const getUsers = (req: Request, res: Response) => {
+const getUser = (req: Request, res: Response) => {
+    
+    const { userid } = req.params;
 
-    let userid = req.query.userid;
+    let user = global.state.data.users.filter((user: any) => user.id === userid)
+
+    if(user.length) {
+        res.status(200).json(user[0]);
+    }
+    else {
+        res.status(400).json({ badrequest: "User not found" });
+    }
+}
+
+const getUsers = (req: Request, res: Response) => {
 
     if(!usersExist(state.data)) {
         
@@ -26,15 +38,8 @@ const getUsers = (req: Request, res: Response) => {
         });
     }
     else {
-        if(userid) {
 
-            let user = global.state.data.users.filter(user => user.id === userid)
-            res.status(200).json(user[0]);
-        }
-        else {
-
-            res.status(200).json(global.state.data.users);
-        }
+        res.status(200).json(global.state.data.users);
     }
 }
 
@@ -51,7 +56,7 @@ const postUser = (req: Request, res: Response) => {
 
     if (global.state.data.users.filter((user: { firstName: string; lastName: string; }) => user.firstName === newUser.firstName && user.lastName === newUser.lastName).length > 0) {
         
-        res.status(400).json({badrequest: "User already exists"});
+        res.status(400).json({ badrequest: "User already exists" });
     }
     else {
         
@@ -62,6 +67,7 @@ const postUser = (req: Request, res: Response) => {
 }
 
 export default {
+    getUser,
     getUsers,
     postUser
 };

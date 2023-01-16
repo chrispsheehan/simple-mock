@@ -1,21 +1,18 @@
 import { mock } from "./mock/mock.app";
 import { Request, Response } from 'express';
 
-import routes from './users';
+import userHandlers from './users';
 
 const app = mock();
 
-app.get('/health', (req: Request, res: Response) => { 
-  res.json({health: 'OK'});
-});
+app
+  .route("/users")
+  .get(userHandlers.getUsers)
+  .post(userHandlers.postUser);
 
-app.post('/users', (req: Request, res: Response) => { 
-  routes.postUser(req, res);
-});
-
-app.get('/users', (req: Request, res: Response) => { 
-  routes.getUsers(req, res);
-});
+app
+  .route("/users/:userid")
+  .get(userHandlers.getUser)
 
 // log out invalid requests
 app.all('/*', function(req: Request, res: Response) {

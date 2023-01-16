@@ -40,6 +40,10 @@ export function mock (): express.Application {
     app.get('/', (req: Request, res: Response) => {
       res.send(`Hello from ${MOCK_REFERENCE} Mock!`);  
     });
+
+    app.get('/health', (req: Request, res: Response) => { 
+      res.json({health: 'OK'});
+    });
     
     app.delete('/mock/state', (req: Request, res: Response) => { 
       global.state.reset();
