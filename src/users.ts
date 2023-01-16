@@ -66,8 +66,16 @@ const postUser = (req: Request, res: Response) => {
     }
 }
 
+const putUser = (req: Request, res: Response) => {
+}
+
+const patchUser = (req: Request, res: Response) => {
+}
+
 export default {
     getUser,
     getUsers,
-    postUser
+    postUser,
+    putUser,
+    patchUser
 };

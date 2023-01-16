@@ -11,3 +11,5 @@ app
 app
   .route("/users/:userid")
   .get(userHandlers.getUser)
+  .put(userHandlers.putUser)
+  .patch(userHandlers.patchUser);
