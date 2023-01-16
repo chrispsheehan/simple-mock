@@ -88,41 +88,80 @@
 			]
 		},
 		{
-			"name": "Health",
-			"event": [
+			"name": "Admin",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"strictSSL": false,
-				"followRedirects": false
-			},
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUrl}}/health",
-					"host": [
-						"{{baseUrl}}"
+					"name": "Health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"health"
-					]
+					"protocolProfileBehavior": {
+						"strictSSL": false,
+						"followRedirects": false
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "InvalidRoute",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"InvalidRoute message is returned\", function () {",
+									"    pm.response.to.have.body({\"message\": \"invalidRoute\"});",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/badgers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"badgers"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "User",
@@ -163,7 +202,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users?",
+					"raw": "{{baseUrl}}/users",
 					"host": [
 						"{{baseUrl}}"
 					],
@@ -173,7 +212,8 @@
 					"query": [
 						{
 							"key": "",
-							"value": null
+							"value": null,
+							"disabled": true
 						}
 					]
 				}
@@ -249,18 +289,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users?userid={{userid}}",
+					"raw": "{{baseUrl}}/users/{{userid}}",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
-						"users"
-					],
-					"query": [
-						{
-							"key": "userid",
-							"value": "{{userid}}"
-						}
+						"users",
+						"{{userid}}"
 					]
 				}
 			},
