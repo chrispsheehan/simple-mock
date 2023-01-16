@@ -82,10 +82,12 @@ const putUser = (req: Request, res: Response) => {
 
     const { userid } = req.params;
 
+    const newUser: User = req.body;
+
     let user = selectUser(userid);
 
     if(user.length) {
-        res.status(200).json(user[0]);
+        res.status(200).json(newUser);
     }
     else {
         res.status(400).json({ badrequest: "User not found" });
@@ -96,10 +98,12 @@ const patchUser = (req: Request, res: Response) => {
 
     const { userid } = req.params;
 
+    const newUser: User = req.body;
+
     let user = selectUser(userid);
 
     if(user.length) {
-        res.status(200).json(user[0]);
+        res.status(200).json(newUser);
     }
     else {
         res.status(400).json({ badrequest: "User not found" });
