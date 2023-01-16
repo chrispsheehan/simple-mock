@@ -1,6 +1,13 @@
 import { createGuid } from "./helper";
 import { Request, Response } from 'express';
 
+interface User {
+    id: string,
+    firstName: string,
+    lastName: string
+}
+
+
 const usersExist = (state: any): boolean => {
     
     try {
@@ -19,7 +26,7 @@ const getUser = (req: Request, res: Response) => {
     
     const { userid } = req.params;
 
-    let user = global.state.data.users.filter((user: any) => user.id === userid)
+    let user = global.state.data.users.filter((user: User) => user.id === userid)
 
     if(user.length) {
         res.status(200).json(user[0]);
@@ -54,7 +61,7 @@ const postUser = (req: Request, res: Response) => {
         }
     }
 
-    if (global.state.data.users.filter((user: { firstName: string; lastName: string; }) => user.firstName === newUser.firstName && user.lastName === newUser.lastName).length > 0) {
+    if (global.state.data.users.filter((user: User) => user.firstName === newUser.firstName && user.lastName === newUser.lastName).length > 0) {
         
         res.status(400).json({ badrequest: "User already exists" });
     }
