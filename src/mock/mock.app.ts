@@ -33,12 +33,21 @@ export function mock (): express.Application {
       console.log(`${req.method}: ${JSON.stringify(req.url)}`);
       onFinished(res, function () {
         global.state.save(); // save state after each request
+        // log out invalid requests
+        app.all('/*', function(req: Request, res: Response) {
+          console.error(`***ROUTE NOT SUPPORTED***\n`);
+          res.status(404).json({message: "invalidRoute"})
+        });
       })
       next();
     })
     
     app.get('/', (req: Request, res: Response) => {
       res.send(`Hello from ${MOCK_REFERENCE} Mock!`);  
+    });
+
+    app.get('/health', (req: Request, res: Response) => { 
+      res.json({health: 'OK'});
     });
     
     app.delete('/mock/state', (req: Request, res: Response) => { 
