@@ -8,25 +8,30 @@ interface User {
 }
 
 
-const usersExist = (state: any): boolean => {
-    
+function usersExist(state: any): boolean {
+
     try {
-        
-        if(Array.isArray(state.users)) {
+
+        if (Array.isArray(state.users)) {
             return true;
         }
     } catch (error) {
 
-        console.warn('user object not found')
+        console.warn('user object not found');
         return false;
     }
+}
+
+function selectUser(userid: string) {
+
+    return global.state.data.users.filter((user: User) => user.id === userid);
 }
 
 const getUser = (req: Request, res: Response) => {
     
     const { userid } = req.params;
 
-    let user = global.state.data.users.filter((user: User) => user.id === userid)
+    let user = selectUser(userid);
 
     if(user.length) {
         res.status(200).json(user[0]);
@@ -74,9 +79,31 @@ const postUser = (req: Request, res: Response) => {
 }
 
 const putUser = (req: Request, res: Response) => {
+
+    const { userid } = req.params;
+
+    let user = selectUser(userid);
+
+    if(user.length) {
+        res.status(200).json(user[0]);
+    }
+    else {
+        res.status(400).json({ badrequest: "User not found" });
+    }
 }
 
 const patchUser = (req: Request, res: Response) => {
+
+    const { userid } = req.params;
+
+    let user = selectUser(userid);
+
+    if(user.length) {
+        res.status(200).json(user[0]);
+    }
+    else {
+        res.status(400).json({ badrequest: "User not found" });
+    }
 }
 
 export default {
