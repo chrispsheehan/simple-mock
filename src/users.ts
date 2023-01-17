@@ -22,7 +22,7 @@ function usersExist(state: any): boolean {
     }
 }
 
-function selectUser(userid: string) {
+function selectUser(userid: string): User[] {
 
     return global.state.data.users.filter((user: User) => user.id === userid);
 }
@@ -101,11 +101,14 @@ const patchUser = (req: Request, res: Response) => {
 
     const { userid } = req.params;
 
-    const newUser: User = req.body;
-
     let user = selectUser(userid);
 
     if(user.length) {
+
+        const newUser: User = Object.assign(user[0], req.body);
+
+        global.state.data.users.map((user: User) => [newUser].find((u: User) => u.id === user.id) || user);
+
         res.status(200).json(newUser);
     }
     else {
