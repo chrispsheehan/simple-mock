@@ -22,9 +22,18 @@ function usersExist(state: any): boolean {
     }
 }
 
-function selectUser(userid: string): User[] {
+function selectUser(req: Request): User[] {
+
+    const { userid } = req.params;
 
     return global.state.data.users.filter((user: User) => user.id === userid);
+}
+
+function addUser(res: Response, newUser: User) {
+
+    global.state.data.users.map((user: User) => [newUser].find((u: User) => u.id === user.id) || user);
+
+    return res.status(200).json(newUser);    
 }
 
 function userNotFoundResponse(res: Response) {
@@ -33,10 +42,8 @@ function userNotFoundResponse(res: Response) {
 }
 
 const getUser = (req: Request, res: Response) => {
-    
-    const { userid } = req.params;
 
-    let user = selectUser(userid);
+    let user = selectUser(req);
 
     if(user.length) {
         res.status(200).json(user[0]);
@@ -85,38 +92,32 @@ const postUser = (req: Request, res: Response) => {
 
 const putUser = (req: Request, res: Response) => {
 
-    const { userid } = req.params;
-
     const newUser: User = req.body;
 
-    let user = selectUser(userid);
+    let user = selectUser(req);
 
     if(user.length) {
 
-        global.state.data.users.map((user: User) => [newUser].find((u: User) => u.id === user.id) || user);
-
-        res.status(200).json(newUser);
+        addUser(res, newUser);
     }
     else {
+
         userNotFoundResponse(res);
     }
 }
 
 const patchUser = (req: Request, res: Response) => {
 
-    const { userid } = req.params;
-
-    let user = selectUser(userid);
+    let user = selectUser(req);
 
     if(user.length) {
 
         const newUser: User = Object.assign(user[0], req.body);
 
-        global.state.data.users.map((user: User) => [newUser].find((u: User) => u.id === user.id) || user);
-
-        res.status(200).json(newUser);
+        addUser(res, newUser);
     }
     else {
+
         userNotFoundResponse(res);
     }
 }
