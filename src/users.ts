@@ -27,6 +27,11 @@ function selectUser(userid: string): User[] {
     return global.state.data.users.filter((user: User) => user.id === userid);
 }
 
+function userNotFoundResponse(res: Response) {
+    
+    return res.status(400).json({ badrequest: "User not found" });
+}
+
 const getUser = (req: Request, res: Response) => {
     
     const { userid } = req.params;
@@ -37,7 +42,7 @@ const getUser = (req: Request, res: Response) => {
         res.status(200).json(user[0]);
     }
     else {
-        res.status(400).json({ badrequest: "User not found" });
+        userNotFoundResponse(res);
     }
 }
 
@@ -93,7 +98,7 @@ const putUser = (req: Request, res: Response) => {
         res.status(200).json(newUser);
     }
     else {
-        res.status(400).json({ badrequest: "User not found" });
+        userNotFoundResponse(res);
     }
 }
 
@@ -112,7 +117,7 @@ const patchUser = (req: Request, res: Response) => {
         res.status(200).json(newUser);
     }
     else {
-        res.status(400).json({ badrequest: "User not found" });
+        userNotFoundResponse(res);
     }
 }
 
