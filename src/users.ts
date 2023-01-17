@@ -87,6 +87,9 @@ const putUser = (req: Request, res: Response) => {
     let user = selectUser(userid);
 
     if(user.length) {
+
+        global.state.data.users.map((user: User) => [newUser].find((u: User) => u.id === user.id) || user);
+
         res.status(200).json(newUser);
     }
     else {
