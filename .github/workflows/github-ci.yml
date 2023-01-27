@@ -42,7 +42,7 @@ jobs:
     - name: Build
       run: |
         yarn build
-        ls
+        ls dist
 
     - uses: actions/upload-artifact@master
       with:
@@ -58,7 +58,7 @@ jobs:
         name: dist-build
         path: dist
     - name: check
-      run: ls
+      run: ls dist
 
     - uses: actions/checkout@v2
     - name: Set up QEMU
