@@ -78,5 +78,6 @@ jobs:
       env:
         DOCKERHUB_USERNAME: '${{ secrets.DOCKERHUB_USERNAME }}'
       with:
+        context: .
         push: true
         tags: "${{ env.DOCKERHUB_USERNAME }}/example-mock:${{ needs.build.outputs.sha_short }}"
