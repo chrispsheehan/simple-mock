@@ -42,6 +42,7 @@ jobs:
     - name: Build
       run: |
         yarn build
+        ls
 
     - uses: actions/upload-artifact@master
       with:
@@ -56,7 +57,9 @@ jobs:
       with:
         name: dist-build
         path: dist
-        
+    - name: check
+      run: ls
+
     - uses: actions/checkout@v2
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
