@@ -9,14 +9,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      sha_short: ${{ steps.setup.outputs.GITHUB_SHA_SHORT }}
-      docker_username: ${{ steps.setup.outputs.DOCKERHUB_USERNAME }}
+      sha_short: ${{ steps.sha.outputs.GITHUB_SHA_SHORT }}
+      docker_username: ${{ steps.docker.outputs.DOCKERHUB_USERNAME }}
     steps:
-    - uses: actions/checkout@v2
-    - name: setup
-      run: | 
-        echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_OUTPUT
-        echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_OUTPUT
+    - id: sha
+      run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_OUTPUT
+    - id: docker
+      run: echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_OUTPUT
+
     - uses: actions/setup-node@v1
       name: Node.js
       with:
