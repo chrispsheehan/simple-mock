@@ -15,25 +15,14 @@ jobs:
     steps:
       - id: step1
         run: echo "test=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_OUTPUT
-      - id: step2
-        run: echo "test=$(echo $DOCKERHUB_USERNAME)" >> $GITHUB_OUTPUT
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-      - name: Step 2 - GitHub Action if statement (true)
-        env: 
-          WHO_TO_TRUST: ${{ secrets.DOCKERHUB_USERNAME }}
-        if:  env.WHO_TO_TRUST == 'TrustNo1'
-        run: echo "I know what the secret token is!"
-      - name: Step 2 - GitHub Action if statement (false)
-        env: 
-          WHO_TO_TRUST: ${{ secrets.DOCKERHUB_USERNAME }}
-        if:  env.WHO_TO_TRUST != 'TrustNo1'
-        run: echo "I know what the secret token is NOT!"
+
   job2:
     runs-on: ubuntu-latest
     needs: job1
+    env:
+      DOCKERHUB_USERNAME: '${{ secrets.DOCKERHUB_USERNAME }}'
     steps:
-      - run: echo ${{needs.job1.outputs.output1}} and ${{needs.job1.outputs.output2}}
+      - run: echo ${{needs.job1.outputs.output1}} and $DOCKERHUB_USERNAME
 
 
 # jobs:
