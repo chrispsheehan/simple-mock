@@ -43,10 +43,20 @@ jobs:
       run: |
         yarn build
 
+    - uses: actions/upload-artifact@master
+      with:
+        name: dist-build
+        path: dist
+
   push:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/download-artifact@master
+      with:
+        name: dist-build
+        path: dist
+        
     - uses: actions/checkout@v2
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
