@@ -12,7 +12,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Set environment variables
       run: | 
-        export GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)
+        export GIT_PR_SHA="${{ github.sha }}"
+        export GIT_PR_SHA_SHORT="${GIT_PR_SHA:0:10}"
         export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
         echo "::set-output name=github_sha_short::${ GITHUB_SHA_SHORT }"
         echo "::set-output name=dockerhub_username::${ DOCKERHUB_USERNAME }"
