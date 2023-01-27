@@ -16,7 +16,9 @@ jobs:
       - id: step1
         run: echo "test=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_OUTPUT
       - id: step2
-        run: echo "test=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_OUTPUT
+        run: echo "test=$DOCKERHUB_USERNAME" >> $GITHUB_OUTPUT
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   job2:
     runs-on: ubuntu-latest
     needs: job1
