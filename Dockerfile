@@ -8,10 +8,12 @@ ENV MOCK_REFERENCE=${_MOCK_REFERENCE}
 
 ENV STATE_FILE=/state.json
 
-WORKDIR /dist
+RUN mkdir /dist
 
 COPY ./package.json /package.json
 COPY ./dist /dist
+
+WORKDIR /dist
 
 RUN yarn
 
