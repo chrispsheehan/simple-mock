@@ -38,14 +38,15 @@ jobs:
         path: dist
     - name: check-dist
       run: ls dist
-    - name: Run
-      env:
-        STATE_FILE: /state.json
-      run: node dist/index.js
+
     - name: Yarn
       run: yarn build && yarn add forever
+
     - name: Start
+      env:
+        STATE_FILE: /state.json
       run: forever start /dist/index.js
+      
     - name: Stop
       run: forever stop /dist/index.js
 
