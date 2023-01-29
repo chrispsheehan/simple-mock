@@ -11,11 +11,11 @@ jobs:
     outputs:
       sha_short: ${{ steps.set_sha.outputs.GITHUB_SHA_SHORT }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - id: set_sha
       run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_OUTPUT
 
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v3
       name: Node.js
       with:
         node-version: 16
@@ -38,7 +38,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@master
       with:
         name: dist-build
@@ -69,7 +69,7 @@ jobs:
     needs: [ build, test ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
     
