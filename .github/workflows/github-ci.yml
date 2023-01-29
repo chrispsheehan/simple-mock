@@ -47,7 +47,7 @@ jobs:
       run: ls dist
   
     - name: Yarn
-      run: yarn && yarn add forever && yarn add curl
+      run: yarn && yarn add forever
 
     - name: Start
       run: echo '{}' > ${{ env.STATE_FILE }} && sleep 1 && ${{ env.FOREVER }} start ${{ env.INDEX }} && sleep 5
