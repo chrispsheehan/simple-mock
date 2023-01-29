@@ -55,6 +55,10 @@ jobs:
     - name: Ping
       run: curl localhost:8080/health
 
+    - uses: matt-ball/newman-action@master
+      with:
+        collection: Mock.postman_collection.json
+
     - name: Print logs
       run: ${{ env.FOREVER }} logs && awk '{print}' /home/runner/.forever/*.log
 
