@@ -43,16 +43,13 @@ jobs:
     - name: Yarn
       run: yarn && yarn add forever
 
-    - name: debug
-      run: ls node_modules
+    - name: Start
+      env:
+        STATE_FILE: /state.json
+      run: node_modules/forever/bin/forever start /dist/index.js
 
-    # - name: Start
-    #   env:
-    #     STATE_FILE: /state.json
-    #   run: forever start /dist/index.js
-
-    # - name: Stop
-    #   run: forever stop /dist/index.js
+    - name: Stop
+      run: node_modules/forever/bin/forever stop /dist/index.js
 
   # push:
   #   needs: build
