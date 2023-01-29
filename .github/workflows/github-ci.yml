@@ -51,7 +51,7 @@ jobs:
     - name: logs
       run: node_modules/forever/bin/forever logs
     - name: Check
-      run: cat out.log
+      run: awk '{print}' /home/runner/.forever/*.log
 
   # push:
   #   needs: build
