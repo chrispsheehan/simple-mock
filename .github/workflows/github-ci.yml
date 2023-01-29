@@ -50,8 +50,8 @@ jobs:
 
     - name: logs
       run: node_modules/forever/bin/forever logs
-    # - name: Check
-    #   run: curl localhost:8080
+    - name: Check
+      run: cat /home/runner/.forever/4AOv.log
 
   # push:
   #   needs: build
