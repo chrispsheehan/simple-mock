@@ -50,10 +50,7 @@ jobs:
         path: package.json
 
     - name: Yarn
-      run: yarn build
-
-    - name: Add forever lib
-      run: yarn add forever
+      run: yarn && yarn add forever
 
     - name: Start
       env:
