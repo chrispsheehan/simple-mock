@@ -46,7 +46,7 @@ jobs:
     - name: Start
       env:
         STATE_FILE: /state.json
-      run: echo '{}' > state.json && node_modules/forever/bin/forever start dist/index.js -o out.log && sleep 10
+      run: echo '{}' > ${{ env.STATE_FILE }} && sleep 2 && node_modules/forever/bin/forever start dist/index.js -o out.log && sleep 10
 
     - name: logs
       run: node_modules/forever/bin/forever logs
