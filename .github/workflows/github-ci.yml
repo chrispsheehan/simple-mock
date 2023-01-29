@@ -46,12 +46,14 @@ jobs:
     - name: Start
       env:
         STATE_FILE: /home/runner/work/state.json
-      run: echo '{}' > ${{ env.STATE_FILE }} && sleep 2 && node_modules/forever/bin/forever start dist/index.js -o out.log && sleep 10
+        MOCK_REFERENCE: 'CI'
+      run: echo '{}' > ${{ env.STATE_FILE }} && sleep 2 && node_modules/forever/bin/forever start dist/index.js && sleep 10
 
-    - name: logs
-      run: node_modules/forever/bin/forever logs
-    - name: Check
-      run: awk '{print}' /home/runner/.forever/*.log
+    - name: Ping
+      run: curl localhost:8080/health
+
+    - name: Print logs
+      run: node_modules/forever/bin/forever logs && awk '{print}' /home/runner/.forever/*.log
 
     - name: Stop
       run: node_modules/forever/bin/forever stop dist/index.js
