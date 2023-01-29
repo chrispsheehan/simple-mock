@@ -44,7 +44,7 @@ jobs:
       run: yarn && yarn add forever
 
     - name: debug
-      run: ls
+      run: ls node_modules
 
     # - name: Start
     #   env:
