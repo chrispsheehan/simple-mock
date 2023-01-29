@@ -46,10 +46,13 @@ jobs:
     - name: Start
       env:
         STATE_FILE: /state.json
-      run: node_modules/forever/bin/forever start dist/index.js
+      run: node_modules/forever/bin/forever start dist/index.js && sleep 10
 
-    - name: Stop
-      run: curl http://localhost:8080
+    - name: logs
+      run: node_modules/forever/bin/forever logs dist/index.js
+
+    - name: Check
+      run: curl localhost:8080
 
   # push:
   #   needs: build
