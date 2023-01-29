@@ -28,11 +28,6 @@ jobs:
         name: dist-build
         path: dist
 
-    - uses: actions/upload-artifact@master
-      with:
-        name: package-json
-        path: package.json
-
   test:
     needs: build
     runs-on: ubuntu-latest
@@ -44,13 +39,7 @@ jobs:
     - name: check-dist
       run: ls dist
 
-    - uses: actions/download-artifact@master
-      with:
-        name: package-json
-        path: package.json
-    - name: check-package.json
-      run: ls
-
+    - uses: actions/checkout@v2     
     - name: Yarn
       run: yarn
 
