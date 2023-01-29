@@ -46,12 +46,15 @@ jobs:
     - name: Start
       env:
         STATE_FILE: /state.json
-      run: node_modules/forever/bin/forever start dist/index.js -o out.log && sleep 10
+      run: echo '{}' > state.json && node_modules/forever/bin/forever start dist/index.js -o out.log && sleep 10
 
     - name: logs
       run: node_modules/forever/bin/forever logs
     - name: Check
       run: awk '{print}' /home/runner/.forever/*.log
+
+    - name: Stop
+      run: node_modules/forever/bin/forever stop dist/index.js
 
   # push:
   #   needs: build
