@@ -32,6 +32,9 @@ jobs:
     env:
       STATE_FILE: /home/runner/work/state.json
       MOCK_REFERENCE: 'CI'
+      FOREVER: node_modules/forever/bin/forever
+      INDEX: dist/index.js
+      
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -47,16 +50,16 @@ jobs:
       run: yarn && yarn add forever && yarn add curl
 
     - name: Start
-      run: echo '{}' > ${{ env.STATE_FILE }} && sleep 2 && node_modules/forever/bin/forever start dist/index.js && sleep 10
+      run: echo '{}' > ${{ env.STATE_FILE }} && sleep 2 && ${{ env.FOREVER }} start ${{ env.INDEX }} && sleep 10
 
     - name: Ping
       run: curl localhost:8080/health
 
     - name: Print logs
-      run: node_modules/forever/bin/forever logs && awk '{print}' /home/runner/.forever/*.log
+      run: ${{ env.FOREVER }} logs && awk '{print}' /home/runner/.forever/*.log
 
     - name: Stop
-      run: node_modules/forever/bin/forever stop dist/index.js
+      run: ${{ env.FOREVER }} stop ${{ env.INDEX }}
 
   # push:
   #   needs: build
