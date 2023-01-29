@@ -46,12 +46,12 @@ jobs:
     - name: Start
       env:
         STATE_FILE: /state.json
-      run: node_modules/forever/bin/forever start dist/index.js && sleep 10
+      run: node_modules/forever/bin/forever start dist/index.js -o out.log && sleep 10
 
     - name: logs
       run: node_modules/forever/bin/forever logs
     - name: Check
-      run: cat /home/runner/.forever/4AOv.log
+      run: cat out.log
 
   # push:
   #   needs: build
