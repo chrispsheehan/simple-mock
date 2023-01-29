@@ -48,6 +48,8 @@ jobs:
       with:
         name: package-json
         path: package.json
+    - name: check-package.json
+      run: ls
 
     - name: Yarn
       run: yarn
