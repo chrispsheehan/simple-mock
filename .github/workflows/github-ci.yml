@@ -50,15 +50,15 @@ jobs:
         path: package.json
 
     - name: Yarn
-      run: yarn && yarn add forever
+      run: yarn
 
-    - name: Start
-      env:
-        STATE_FILE: /state.json
-      run: forever start /dist/index.js
+    # - name: Start
+    #   env:
+    #     STATE_FILE: /state.json
+    #   run: forever start /dist/index.js
 
-    - name: Stop
-      run: forever stop /dist/index.js
+    # - name: Stop
+    #   run: forever stop /dist/index.js
 
   # push:
   #   needs: build
