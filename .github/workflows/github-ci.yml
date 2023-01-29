@@ -50,7 +50,7 @@ jobs:
       run: yarn && yarn add forever && yarn add curl
 
     - name: Start
-      run: echo '{}' > ${{ env.STATE_FILE }} && sleep 2 && ${{ env.FOREVER }} start ${{ env.INDEX }} && sleep 10
+      run: echo '{}' > ${{ env.STATE_FILE }} && sleep 1 && ${{ env.FOREVER }} start ${{ env.INDEX }} && sleep 5
 
     - name: Ping
       run: curl localhost:8080/health
