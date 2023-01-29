@@ -29,6 +29,9 @@ jobs:
         path: dist
 
   test:
+    env:
+      STATE_FILE: /home/runner/work/state.json
+      MOCK_REFERENCE: 'CI'
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -44,9 +47,6 @@ jobs:
       run: yarn && yarn add forever && yarn add curl
 
     - name: Start
-      env:
-        STATE_FILE: /home/runner/work/state.json
-        MOCK_REFERENCE: 'CI'
       run: echo '{}' > ${{ env.STATE_FILE }} && sleep 2 && node_modules/forever/bin/forever start dist/index.js && sleep 10
 
     - name: Ping
