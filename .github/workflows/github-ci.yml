@@ -41,7 +41,7 @@ jobs:
       run: ls dist
   
     - name: Yarn
-      run: yarn && yarn add forever
+      run: yarn && yarn add forever && yarn add curl
 
     - name: Start
       env:
@@ -49,7 +49,7 @@ jobs:
       run: node_modules/forever/bin/forever start dist/index.js
 
     - name: Stop
-      run: node_modules/forever/bin/forever stop dist/index.js
+      run: curl http://localhost:8080
 
   # push:
   #   needs: build
