@@ -46,10 +46,10 @@ jobs:
     - name: Start
       env:
         STATE_FILE: /state.json
-      run: node_modules/forever/bin/forever start /dist/index.js
+      run: node_modules/forever/bin/forever start dist/index.js
 
     - name: Stop
-      run: node_modules/forever/bin/forever stop /dist/index.js
+      run: node_modules/forever/bin/forever stop dist/index.js
 
   # push:
   #   needs: build
