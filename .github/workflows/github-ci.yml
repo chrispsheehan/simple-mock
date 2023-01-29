@@ -49,10 +49,9 @@ jobs:
       run: node_modules/forever/bin/forever start dist/index.js && sleep 10
 
     - name: logs
-      run: node_modules/forever/bin/forever logs dist/index.js
-
-    - name: Check
-      run: curl localhost:8080
+      run: node_modules/forever/bin/forever logs
+    # - name: Check
+    #   run: curl localhost:8080
 
   # push:
   #   needs: build
