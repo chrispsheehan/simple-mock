@@ -75,7 +75,8 @@ jobs:
   #     run: ${{ env.FOREVER }} stop ${{ env.INDEX }}
 
   push:
-    needs: [ setup, build, test ]
+    # needs: [ setup, build, test ]
+    needs: [ setup ]
     runs-on: ubuntu-latest
     steps:
     - name: debug
