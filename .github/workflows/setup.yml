@@ -2,9 +2,13 @@ name: Reusable workflow example test
 
 on:
   workflow_call:
+    outputs:
+      sha-ref:
+        description: "Sha short ref"
+        value: ${{ jobs.set-sha-short-ref.outputs.sha_short }}
 
 jobs:
-  set-sha-ref:
+  set-sha-short-ref:
     runs-on: ubuntu-latest
     outputs:
       sha_short: ${{ steps.set_sha.outputs.GITHUB_SHA_SHORT }}
