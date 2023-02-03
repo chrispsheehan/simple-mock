@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  setup:
+  set-sha-ref:
     runs-on: ubuntu-latest
     outputs:
       sha_short: ${{ steps.set_sha.outputs.GITHUB_SHA_SHORT }}
