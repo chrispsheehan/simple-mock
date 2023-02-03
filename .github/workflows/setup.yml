@@ -29,6 +29,6 @@ jobs:
 
     - name: "check is DOCKERHUB_TOKEN exists"
       env: 
-        DOCKERHUB_TOKEN: '${{ secrets.DOCKERHUB_TOKEN }}''
+        DOCKERHUB_TOKEN: '${{ secrets.DOCKERHUB_TOKEN }}'
       if: ${{ env.DOCKERHUB_TOKEN == '' }}
       run: echo "echo the secret \"DOCKERHUB_TOKEN\" has not been made; echo please go to \"settings \> secrets \> actions\" to create it" && exit 1
