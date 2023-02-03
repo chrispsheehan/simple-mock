@@ -8,14 +8,16 @@ on:
     - cron: "0 10 * * *"
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    outputs:
-      sha_short: ${{ steps.set_sha.outputs.GITHUB_SHA_SHORT }}
-    steps:
-    - uses: actions/checkout@v3
-    - id: set_sha
-      run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_OUTPUT
+  call-workflow-1-in-local-repo:
+    uses: ./.github/workflows/setup.yml
+  # setup:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     sha_short: ${{ steps.set_sha.outputs.GITHUB_SHA_SHORT }}
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - id: set_sha
+  #     run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_OUTPUT
   
   build:
     needs: setup
