@@ -8,7 +8,7 @@ on:
     - cron: "0 10 * * *"
 
 jobs:
-  call-workflow-1-in-local-repo:
+  setup:
     uses: ./.github/workflows/setup.yml
   # setup:
   #   runs-on: ubuntu-latest
