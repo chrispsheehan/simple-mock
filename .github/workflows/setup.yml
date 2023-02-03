@@ -22,12 +22,12 @@ jobs:
     steps:
     - name: "check is DOCKERHUB_USERNAME exists"
       env: 
-          super_secret: ${{ secrets.DOCKERHUB_USERNAMExxx }}
-      if: ${{ env.super_secret == '' }}
+        DOCKERHUB_USERNAME: '${{ secrets.DOCKERHUB_USERNAME }}'
+      if: ${{ env.DOCKERHUB_USERNAME == '' }}
       run: echo "echo the secret \"DOCKERHUB_USERNAME\" has not been made; echo please go to \"settings \> secrets \> actions\" to create it" && exit 1
 
     - name: "check is DOCKERHUB_TOKEN exists"
       env: 
-          super_secret: ${{ secrets.DOCKERHUB_TOKEN }}
-      if: ${{ env.super_secret == '' }}
-      run: echo "echo the secret \"DOCKERHUB_UTOKEN\" has not been made; echo please go to \"settings \> secrets \> actions\" to create it" && exit 1
+        DOCKERHUB_TOKEN: '${{ secrets.DOCKERHUB_TOKEN }}'
+      if: ${{ env.DOCKERHUB_TOKEN == '' }}
+      run: echo "echo the secret \"DOCKERHUB_TOKEN\" has not been made; echo please go to \"settings \> secrets \> actions\" to create it" && exit 1
