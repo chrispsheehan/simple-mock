@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: "check is DOCKERHUB_USERNAME exists"
-      env: 
+      env:
         DOCKERHUB_USERNAME: '${{ secrets.DOCKERHUB_USERNAME }}'
       run: echo asasas ${{ env.DOCKERHUB_USERNAM }}
     #   if: ${{ env.DOCKERHUB_USERNAME == '' }}
