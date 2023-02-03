@@ -10,102 +10,91 @@ on:
 jobs:
   setup:
     uses: ./.github/workflows/setup.yml
-  # setup:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     sha_short: ${{ steps.set_sha.outputs.GITHUB_SHA_SHORT }}
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - id: set_sha
-  #     run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_OUTPUT
   
-  # build:
-  #   needs: setup
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - uses: actions/setup-node@v3
-  #     name: Node.js
-  #     with:
-  #       node-version: 16
-
-  #   - name: Build
-  #     run: yarn build
-
-  #   - uses: actions/upload-artifact@master
-  #     with:
-  #       name: dist-build
-  #       path: dist
-
-  # test:
-  #   env:
-  #     STATE_FILE: /home/runner/work/state.json
-  #     MOCK_REFERENCE: 'CI'
-  #     FOREVER: node_modules/forever/bin/forever
-  #     INDEX: dist/index.js
-      
-  #   needs: [ setup, build ]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - uses: actions/download-artifact@master
-  #     with:
-  #       name: dist-build
-  #       path: dist
-  #   - name: check-dist
-  #     run: ls dist
-  
-  #   - name: Yarn
-  #     run: yarn && yarn add forever
-
-  #   - name: Start
-  #     run: echo '{}' > ${{ env.STATE_FILE }} && sleep 1 && ${{ env.FOREVER }} start ${{ env.INDEX }} && sleep 5
-
-  #   - name: Ping
-  #     run: curl localhost:8080/health
-
-  #   - uses: matt-ball/newman-action@master
-  #     with:
-  #       collection: Mock.postman_collection.json
-
-  #   - name: Print logs
-  #     run: ${{ env.FOREVER }} logs && awk '{print}' /home/runner/.forever/*.log
-
-  #   - name: Stop
-  #     run: ${{ env.FOREVER }} stop ${{ env.INDEX }}
-
-  push:
-    # needs: [ setup, build, test ]
-    needs: [ setup ]
+  build:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
-    - name: debug
-      run: echo aaaa ${{ needs.setup.outputs.sha-ref }}
-    # - uses: actions/checkout@v3
-    # - name: Set up QEMU
-    #   uses: docker/setup-qemu-action@v2
-    
-    # - name: Set up Docker Buildx
-    #   uses: docker/setup-buildx-action@v2
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      name: Node.js
+      with:
+        node-version: 16
 
-    # - uses: actions/download-artifact@master
-    #   with:
-    #     name: dist-build
-    #     path: dist
-    # - name: check-dist
-    #   run: ls dist
+    - name: Build
+      run: yarn build
 
-    # - name: Login to Docker Hub
-    #   uses: docker/login-action@v2
-    #   with:
-    #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-    #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - uses: actions/upload-artifact@master
+      with:
+        name: dist-build
+        path: dist
+
+  test:
+    env:
+      STATE_FILE: /home/runner/work/state.json
+      MOCK_REFERENCE: 'CI'
+      FOREVER: node_modules/forever/bin/forever
+      INDEX: dist/index.js
+      
+    needs: [ setup, build ]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@master
+      with:
+        name: dist-build
+        path: dist
+    - name: check-dist
+      run: ls dist
+  
+    - name: Yarn
+      run: yarn && yarn add forever
+
+    - name: Start
+      run: echo '{}' > ${{ env.STATE_FILE }} && sleep 1 && ${{ env.FOREVER }} start ${{ env.INDEX }} && sleep 5
+
+    - name: Ping
+      run: curl localhost:8080/health
+
+    - uses: matt-ball/newman-action@master
+      with:
+        collection: Mock.postman_collection.json
+
+    - name: Print logs
+      run: ${{ env.FOREVER }} logs && awk '{print}' /home/runner/.forever/*.log
+
+    - name: Stop
+      run: ${{ env.FOREVER }} stop ${{ env.INDEX }}
+
+  push:
+    needs: [ setup, build, test ]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
     
-    # - name: Docker Push
-    #   uses: docker/build-push-action@v3
-    #   env:
-    #     DOCKERHUB_USERNAME: '${{ secrets.DOCKERHUB_USERNAME }}'
-    #   with:
-    #     context: .
-    #     push: true
-    #     tags: "${{ env.DOCKERHUB_USERNAME }}/example-mock:${{ needs.setup.outputs.sha_short }}"
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - uses: actions/download-artifact@master
+      with:
+        name: dist-build
+        path: dist
+    - name: check-dist
+      run: ls dist
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    - name: Docker Push
+      uses: docker/build-push-action@v3
+      env:
+        DOCKERHUB_USERNAME: '${{ secrets.DOCKERHUB_USERNAME }}'
+      with:
+        context: .
+        push: true
+        tags: "${{ env.DOCKERHUB_USERNAME }}/example-mock:${{ needs.setup.outputs.sha-ref }}"
